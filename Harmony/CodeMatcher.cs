@@ -27,7 +27,7 @@ namespace Harmony
 
 		/// <summary>Constructor creating a <see cref="CodeMatch"/>. Use without opcode/operand to match any instruction</summary>
 		/// 
-		/// <param name="opcode"> (Optional) The <see cref="OpCode" />. Use <see langword="null"/> to ignore the opcode</param>
+		/// <param name="opcode"> (Optional) The <see cref="System.Reflection.Emit.OpCode" />. Use <see langword="null"/> to ignore the opcode</param>
 		/// <param name="operand">(Optional) The operand. Use <see langword="null"/> to ignore the operand</param>
 		/// <param name="name">	  (Optional) The name under this match is saved</param>
 		///
@@ -39,7 +39,7 @@ namespace Harmony
 		}
 
 		/// <summary>Constructor creating a <see cref="CodeMatch"/> using multiple opcodes</summary>
-		/// <param name="opcodes">A list of possible <see cref="OpCode" /></param>
+		/// <param name="opcodes">A list of possible <see cref="System.Reflection.Emit.OpCode" /></param>
 		/// <param name="operand">(Optional) The operand. Use <see langword="null"/> to ignore the operand.</param>
 		/// <param name="name">	  (Optional) The name under this match is saved.</param>
 		///
