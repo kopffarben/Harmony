@@ -27,7 +27,7 @@ namespace Harmony
 
 		/// <summary>Constructor creating a <see cref="CodeMatch"/>. Use without opcode/operand to match any instruction</summary>
 		/// 
-		/// <param name="opcode"> (Optional) The <see cref="OpCode" />. Use <see langword="null"/> to ignore the opcode</param>
+		/// <param name="opcode"> (Optional) The <see cref="System.Reflection.Emit.OpCode" />. Use <see langword="null"/> to ignore the opcode</param>
 		/// <param name="operand">(Optional) The operand. Use <see langword="null"/> to ignore the operand</param>
 		/// <param name="name">	  (Optional) The name under this match is saved</param>
 		///
@@ -39,7 +39,7 @@ namespace Harmony
 		}
 
 		/// <summary>Constructor creating a <see cref="CodeMatch"/> using multiple opcodes</summary>
-		/// <param name="opcodes">A list of possible <see cref="OpCode" /></param>
+		/// <param name="opcodes">A list of possible <see cref="System.Reflection.Emit.OpCode" /></param>
 		/// <param name="operand">(Optional) The operand. Use <see langword="null"/> to ignore the operand.</param>
 		/// <param name="name">	  (Optional) The name under this match is saved.</param>
 		///
@@ -135,54 +135,54 @@ namespace Harmony
 		///
 		public int Pos { get; private set; } = -1;
 
-		/// <summary>	Gets the length. </summary>
-		/// <value>	The length. </value>
+		/// <summary>Gets the total number of <see cref="CodeInstruction"/>s</summary>
+		/// <value>The count</value>
 		///
 		public int Length => codes.Count;
 
-		/// <summary>	Gets a value indicating whether this object is valid. </summary>
-		/// <value>	True if this object is valid, false if not. </value>
+		/// <summary>Tests if the current position is valid (0 - length-1)</summary>
+		/// <value>True if valid, false if not valid</value>
 		///
 		public bool IsValid => Pos >= 0 && Pos < Length;
 
-		/// <summary>	Gets a value indicating whether this object is invalid. </summary>
-		/// <value>	True if this object is invalid, false if not. </value>
+		/// <summary>Tests if the current position is invalid (less than 0 or greater or equal to length)</summary>
+		/// <value>True if invalid, false if valid</value>
 		///
 		public bool IsInvalid => Pos < 0 || Pos >= Length;
 
-		/// <summary>	Gets the remaining. </summary>
-		/// <value>	The remaining. </value>
+		/// <summary>Gets the number of remaining <see cref="CodeInstruction"/>s</summary>
+		/// <value>The remainder count</value>
 		///
 		public int Remaining => Length - Math.Max(0, Pos);
 
-		/// <summary>	Gets the opcode. </summary>
-		/// <value>	The opcode. </value>
+		/// <summary>Gets the opcode of the current <see cref="CodeInstruction"/></summary>
+		/// <value>The current <see cref="System.Reflection.Emit.OpCode" /></value>
 		///
 		public ref OpCode Opcode => ref codes[Pos].opcode;
 
-		/// <summary>	Gets the operand. </summary>
-		/// <value>	The operand. </value>
+		/// <summary>Gets the operand of the current <see cref="CodeInstruction"/></summary>
+		/// <value>The current operand (type depends on the opcode)</value>
 		///
 		public ref object Operand => ref codes[Pos].operand;
 
-		/// <summary>	Gets the labels. </summary>
-		/// <value>	The labels. </value>
+		/// <summary>Gets the labels of the current <see cref="CodeInstruction"/></summary>
+		/// <value>The current <see cref="List{Label}"/></value>
 		///
 		public ref List<Label> Labels => ref codes[Pos].labels;
 
-		/// <summary>	Gets the blocks. </summary>
-		/// <value>	The blocks. </value>
+		/// <summary>Gets the exception block settings of the current <see cref="CodeInstruction"/></summary>
+		/// <value>The current <see cref="List{ExceptionBlock}"/></value>
 		///
 		public ref List<ExceptionBlock> Blocks => ref codes[Pos].blocks;
 
-		/// <summary>	Default constructor. </summary>
+		/// <summary>Default constructor</summary>
 		public CodeMatcher()
 		{
 		}
 
-		/// <summary>	Constructor. </summary>
-		/// <param name="instructions">	The instructions.</param>
-		/// <param name="generator">	 	(Optional) The generator.</param>
+		/// <summary>Constructor creating a <see cref="CodeMatcher"/> using the values available in a transpiler call</summary>
+		/// <param name="instructions">The instructions.</param>
+		/// <param name="generator">	 (Optional) The generator.</param>
 		///
 		public CodeMatcher(IEnumerable<CodeInstruction> instructions, ILGenerator generator = null)
 		{
@@ -190,8 +190,8 @@ namespace Harmony
 			codes = instructions.Select(c => new CodeInstruction(c)).ToList();
 		}
 
-		/// <summary>	Makes a deep copy of this object. </summary>
-		/// <returns>	A copy of this object. </returns>
+		/// <summary>Creates a <see cref="CodeMatcher"/> by making a deep copy</summary>
+		/// <returns>A copy of a <see cref="CodeMatcher"/></returns>
 		///
 		public CodeMatcher Clone()
 		{
