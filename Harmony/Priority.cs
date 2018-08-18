@@ -1,5 +1,6 @@
-﻿namespace Harmony
+namespace Harmony
 {
+	/// <summary>A priority.</summary>
 	public static class Priority
 	{
 		public const int Last = 0;

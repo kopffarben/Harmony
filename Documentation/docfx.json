@@ -1,0 +1,80 @@
+{
+	"metadata": [
+		{
+			"src": [
+				{
+					"src": "../Harmony",
+					"files": [
+						"Attributes.cs",
+						"CodeInstruction.cs",
+						"CodeMatcher.cs",
+						"HarmonyInstance.cs",
+						"HarmonyMethod.cs",
+						"Priority.cs",
+						"Extras/DelegateTypeFactory.cs",
+						"Extras/FastAccess.cs",
+						"Extras/MethodInvoker.cs",
+						"Tools/AccessTools.cs",
+						"Tools/Extensions.cs",
+						"Tools/FileLog.cs",
+						"Tools/SymbolExtensions.cs",
+						"Tools/Traverse.cs"
+					]
+				}
+			],
+			"dest": "api",
+			"filter": "filterConfig.yml",
+			"properties":{
+				"TargetFramework": "net35"
+			}
+		}
+	],
+	"build": {
+		"content": [
+		{
+				"files": [
+					 "index.md",
+					"toc.yml"
+				]
+			},
+		{
+				"files": [
+					"articles/**.md",
+					"articles/**/toc.yml"
+				]
+			},
+			{
+				"files": [
+					"api/**/**.yml",
+					"api/**/index.md"
+				]
+			}
+		],
+		"resource": [
+			{
+				"files": [
+					"images/**"
+				]
+			}
+		],
+		"overwrite": [
+			{
+				"files": [
+					"apidoc/**.md"
+				]
+			}
+		],
+		"dest": "_site",
+		"globalMetadataFiles": [],
+		"fileMetadataFiles": [],
+		"template": [
+			"statictoc"
+		],
+		"postProcessors": [],
+		"markdownEngineName": "markdig",
+		"noLangKeyword": false,
+		"keepFileLink": false,
+		"cleanupCacheHistory": false,
+		"disableGitFeatures": false
+	}
+}

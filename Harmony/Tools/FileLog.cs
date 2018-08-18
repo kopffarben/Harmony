@@ -1,17 +1,24 @@
+// file:	Tools\FileLog.cs
+//
+// summary:	Implements the file log class
+/// 
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Harmony
 {
+	/// <summary>A file log.</summary>
 	public static class FileLog
 	{
+		/// <summary>Full pathname of the log file.</summary>
 		public static string logPath;
+		/// <summary>The indent character.</summary>
 		public static char indentChar = '\t';
+		/// <summary>The indent level.</summary>
 		public static int indentLevel = 0;
 		static List<string> buffer = new List<string>();
 
@@ -26,14 +33,20 @@ namespace Harmony
 			return new string(indentChar, indentLevel);
 		}
 
+		/// <summary>Change indent.</summary>
+		/// <param name="delta">The delta.</param>
+		///
 		public static void ChangeIndent(int delta)
 		{
 			indentLevel = Math.Max(0, indentLevel + delta);
 		}
 
-		// use this method only if you are sure that FlushBuffer will be called
-		// or else logging information is incomplete in case of a crash
-		//
+		/// <summary>
+		///   use this method only if you are sure that FlushBuffer will be called
+		///   or else logging information is incomplete in case of a crash.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		///
 		public static void LogBuffered(string str)
 		{
 			lock (logPath)
@@ -42,6 +55,7 @@ namespace Harmony
 			}
 		}
 
+		/// <summary>Flushes the buffer.</summary>
 		public static void FlushBuffer()
 		{
 			lock (logPath)
@@ -58,9 +72,12 @@ namespace Harmony
 			}
 		}
 
-		// this is the slower method that flushes changes directly to the file
-		// to prevent missing information in case of a cache
-		//
+		/// <summary>
+		///   this is the slower method that flushes changes directly to the file
+		///   to prevent missing information in case of a cache.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		///
 		public static void Log(string str)
 		{
 			lock (logPath)
@@ -72,6 +89,7 @@ namespace Harmony
 			}
 		}
 
+		/// <summary>Resets this FileLog.</summary>
 		public static void Reset()
 		{
 			lock (logPath)
@@ -81,6 +99,10 @@ namespace Harmony
 			}
 		}
 
+		/// <summary>Logs the bytes.</summary>
+		/// <param name="ptr">The pointer.</param>
+		/// <param name="len">The length.</param>
+		///
 		public static unsafe void LogBytes(long ptr, int len)
 		{
 			lock (logPath)

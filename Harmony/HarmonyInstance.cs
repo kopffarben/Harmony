@@ -9,12 +9,21 @@ using System.Reflection.Emit;
 
 namespace Harmony
 {
+	/// <summary>A patches.</summary>
 	public class Patches
 	{
+		/// <summary>The prefixes.</summary>
 		public readonly ReadOnlyCollection<Patch> Prefixes;
+
+		/// <summary>The postfixes.</summary>
 		public readonly ReadOnlyCollection<Patch> Postfixes;
+
+		/// <summary>The transpilers.</summary>
 		public readonly ReadOnlyCollection<Patch> Transpilers;
 
+		/// <summary>Gets the owners.</summary>
+		/// <value>The owners.</value>
+		///
 		public ReadOnlyCollection<string> Owners
 		{
 			get
@@ -27,6 +36,11 @@ namespace Harmony
 			}
 		}
 
+		/// <summary>Constructor.</summary>
+		/// <param name="prefixes">	The prefixes.</param>
+		/// <param name="postfixes">  The postfixes.</param>
+		/// <param name="transpilers">The transpilers.</param>
+		///
 		public Patches(Patch[] prefixes, Patch[] postfixes, Patch[] transpilers)
 		{
 			if (prefixes == null) prefixes = new Patch[0];
@@ -39,10 +53,17 @@ namespace Harmony
 		}
 	}
 
+	/// <summary>A harmony instance.</summary>
 	public class HarmonyInstance
 	{
 		readonly string id;
+
+		/// <summary>Gets the identifier.</summary>
+		/// <value>The identifier.</value>
+		///
 		public string Id => id;
+
+		/// <summary>True to debug.</summary>
 		public static bool DEBUG = false;
 
 		private static bool selfPatchingDone = false;
@@ -73,6 +94,11 @@ namespace Harmony
 			}
 		}
 
+		/// <summary>Creates a new HarmonyInstance.</summary>
+		/// <exception cref="Exception">Thrown when an exception error condition occurs.</exception>
+		/// <param name="id">The identifier.</param>
+		/// <returns>A HarmonyInstance.</returns>
+		///
 		public static HarmonyInstance Create(string id)
 		{
 			if (id == null) throw new Exception("id cannot be null");
@@ -91,8 +117,7 @@ namespace Harmony
 			throw new Exception("Unexpected end of stack trace");
 		}
 
-		//
-
+		/// <summary>Patch all.</summary>
 		public void PatchAll()
 		{
 			var method = new StackTrace().GetFrame(1).GetMethod();
@@ -100,6 +125,9 @@ namespace Harmony
 			PatchAll(assembly);
 		}
 
+		/// <summary>Patch all.</summary>
+		/// <param name="assembly">The assembly.</param>
+		///
 		public void PatchAll(Assembly assembly)
 		{
 			assembly.GetTypes().Do(type =>
@@ -114,12 +142,22 @@ namespace Harmony
 			});
 		}
 
+		/// <summary>Patches.</summary>
+		/// <param name="original">  The original.</param>
+		/// <param name="prefix">	  (Optional) The prefix.</param>
+		/// <param name="postfix">	  (Optional) The postfix.</param>
+		/// <param name="transpiler">(Optional) The transpiler.</param>
+		/// <returns>A DynamicMethod.</returns>
+		///
 		public DynamicMethod Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null)
 		{
 			var processor = new PatchProcessor(this, new List<MethodBase> { original }, prefix, postfix, transpiler);
 			return processor.Patch().FirstOrDefault();
 		}
 
+		/// <summary>Unpatch all.</summary>
+		/// <param name="harmonyID">(Optional) Identifier for the harmony.</param>
+		///
 		public void UnpatchAll(string harmonyID = null)
 		{
 			bool IDCheck(Patch patchInfo) => harmonyID == null || patchInfo.owner == harmonyID;
@@ -134,20 +172,31 @@ namespace Harmony
 			}
 		}
 
+		/// <summary>Unpatches.</summary>
+		/// <param name="original"> The original.</param>
+		/// <param name="type">		 The type.</param>
+		/// <param name="harmonyID">(Optional) Identifier for the harmony.</param>
+		///
 		public void Unpatch(MethodBase original, HarmonyPatchType type, string harmonyID = null)
 		{
 			var processor = new PatchProcessor(this, new List<MethodBase> { original });
 			processor.Unpatch(type, harmonyID);
 		}
 
+		/// <summary>Unpatches.</summary>
+		/// <param name="original">The original.</param>
+		/// <param name="patch">	The patch.</param>
+		///
 		public void Unpatch(MethodBase original, MethodInfo patch)
 		{
 			var processor = new PatchProcessor(this, new List<MethodBase> { original });
 			processor.Unpatch(patch);
 		}
 
-		//
-
+		/// <summary>Query if 'harmonyID' has any patches.</summary>
+		/// <param name="harmonyID">Identifier for the harmony.</param>
+		/// <returns>True if any patches, false if not.</returns>
+		///
 		public bool HasAnyPatches(string harmonyID)
 		{
 			return GetPatchedMethods()
@@ -155,16 +204,27 @@ namespace Harmony
 				.Any(info => info.Owners.Contains(harmonyID));
 		}
 
+		/// <summary>Gets patch information.</summary>
+		/// <param name="method">The method.</param>
+		/// <returns>The patch information.</returns>
+		///
 		public Patches GetPatchInfo(MethodBase method)
 		{
 			return PatchProcessor.GetPatchInfo(method);
 		}
 
+		/// <summary>Gets the patched methods in this collection.</summary>
+		/// <returns>An enumerator that allows foreach to be used to process the patched methods in this collection.</returns>
+		///
 		public IEnumerable<MethodBase> GetPatchedMethods()
 		{
 			return HarmonySharedState.GetPatchedMethods();
 		}
 
+		/// <summary>Version information.</summary>
+		/// <param name="currentVersion">[out] The current version.</param>
+		/// <returns>A Dictionary&lt;string,Version&gt;</returns>
+		///
 		public Dictionary<string, Version> VersionInfo(out Version currentVersion)
 		{
 			currentVersion = typeof(HarmonyInstance).Assembly.GetName().Version;
