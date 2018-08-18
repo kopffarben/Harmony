@@ -117,7 +117,7 @@ namespace Harmony
 		}
 	}
 
-	/// <summary>	A code matcher. </summary>
+	/// <summary>A chainable class to do search/replace operations on list of <see cref="CodeInstruction"/>. Usually from within a transpiler</summary>
 	public class CodeMatcher
 	{
 		private readonly ILGenerator generator;
@@ -130,8 +130,8 @@ namespace Harmony
 		private void FixStart() { Pos = Math.Max(0, Pos); }
 		private void SetOutOfBounds(int direction) { Pos = direction > 0 ? Length : -1; }
 
-		/// <summary>	Gets or sets the position. </summary>
-		/// <value>	The position. </value>
+		/// <summary>Gets the current index position</summary>
+		/// <value>Current position. -1 means "before start" and Count+1 means "after end"</value>
 		///
 		public int Pos { get; private set; } = -1;
 
